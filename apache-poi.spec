@@ -91,6 +91,7 @@ sed -i '/TestXSSFSheet/d' src/ooxml/testcases/org/apache/poi/xssf/usermodel/AllX
 rm src/ooxml/testcases/org/apache/poi/sl/TestFonts.java
 rm -f src/ooxml/testcases/org/apache/poi/xssf/streaming/TestAutoSizeColumnTracker.java
 rm -f src/ooxml/testcases/org/apache/poi/xssf/streaming/TestSXSSFSheet.java
+rm -f src/ooxml/testcases/org/apache/poi/poifs/crypt/TestSignatureInfo.java
 
 %build
 cat > build.properties <<'EOF'
