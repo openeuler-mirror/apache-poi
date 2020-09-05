@@ -1,0 +1,36 @@
+--- build.xml.orig	2017-08-18 16:29:23.842000853 +0100
++++ build.xml	2017-08-18 16:37:50.969409562 +0100
+@@ -727,15 +727,12 @@
+     </target>
+     <target name="check-compiled-ooxml-xsds" depends="fetch-ooxml-xsds">
+         <condition property="ooxml-compiled-xsds.present">
+-            <or>
+                 <and>
+                     <available file="${ooxml.xsds.jar}"/>
+                     <available file="${ooxml.security.jar}"/>
+                     <available file="${ooxml.xsds.src.jar}"/>
+                     <available file="${ooxml.security.src.jar}"/>
+                 </and>
+-                <isset property="disconnected"/>
+-            </or>
+         </condition>
+     </target>
+ 
+@@ -755,7 +752,7 @@
+ 
+             <taskdef name="xmlbean"
+                      classname="org.apache.xmlbeans.impl.tool.XMLBean"
+-                     classpath="${ooxml.xmlbeans23.jar}.orig"/>
++                     classpath="${ooxml.xmlbeans23.jar}"/>
+ 
+             <property name="xmlbean.xsds.dir" location="build/xmlbean-xsds"/>
+             <property name="xmlbean.sources.dir" location="build/xmlbean-sources"/>
+@@ -786,7 +783,7 @@
+                     nopvr="@{nopvr}"
+                     >
+                 <classpath>
+-                    <path location="${ooxml.xmlbeans23.jar}.orig"/>
++                    <path location="${ooxml.xmlbeans23.jar}"/>
+                 </classpath>
+             </xmlbean>
+ 
