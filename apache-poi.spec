@@ -1,11 +1,11 @@
 %global reldate 20170915
 Name:                apache-poi
 Version:             3.17
-Release:             1
+Release:             2
 Summary:             The Java API for Microsoft Documents
 License:             ASL 2.0 and (CC-BY and CC-BY-SA and W3C) and GPLv3
 URL:                 http://poi.apache.org/
-Source0:             http://archive.apache.org/dist/poi/release/src/poi-src-3.17-20170915.tar.gz
+Source0:             http://archive.apache.org/dist/poi/release/src/poi-src-%{version}-%{reldate}.tar.gz
 # These two zip files renamed after download
 #Source1: http://www.ecma-international.org/publications/files/ECMA-ST/Office%20Open%20XML%201st%20edition%20Part%204%20%28PDF%29.zip
 #Source2: http://www.ecma-international.org/publications/files/ECMA-ST/Office%20Open%20XML%201st%20edition%20Part%202%20%28PDF%29.zip
@@ -19,6 +19,7 @@ Source7:             http://uri.etsi.org/01903/v1.3.2/XAdES.xsd
 Source8:             http://uri.etsi.org/01903/v1.4.1/XAdESv141.xsd
 Patch1:              apache-poi-3.14-compile-xsds.patch
 Patch2:              apache-poi-3.14-build.patch
+Patch3:              Adjust-handling-of-SchemaFactory.patch 
 BuildArch:           noarch
 BuildRequires:       jacoco javapackages-local jmh jmh-generator-annprocess
 BuildRequires:       apache-commons-collections4 >= 4.1 apache-commons-codec apache-commons-logging
@@ -63,6 +64,7 @@ This package contains the API documentation for %{name}.
 %setup -q -n poi-%{version}
 %patch1
 %patch2
+%patch3 -p1
 find -name '*.class' -delete
 find -name '*.jar' -delete
 mkdir lib ooxml-lib
@@ -132,5 +134,8 @@ done
 %license LICENSE NOTICE
 
 %changelog
+* Tue Dec 1 2020 huanghaitao <huanghaitao8@huawei.com> - 3.17-2
+- Fix CVE-2019-12415
+
 * Thu Aug 13 2020 chengzihan <chengzihan2@huawei.com> - 3.17-1
 - Package init
