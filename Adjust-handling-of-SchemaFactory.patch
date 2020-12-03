@@ -1,0 +1,61 @@
+From 06f28db213744590c98feed69bda7d5f5c011b38 Mon Sep 17 00:00:00 2001
+From: PJ Fanning <fanningpj@apache.org>
+Date: Tue, 24 Sep 2019 18:33:37 +0000
+Subject: [PATCH] Bug 63768: Adjust handling of SchemaFactory
+
+git-svn-id: https://svn.apache.org/repos/asf/poi/trunk@1867484 13f79535-47bb-0310-9956-ffa450edef68
+---
+ .../poi/xssf/extractor/XSSFExportToXml.java   |  16 +-
+ .../xssf/extractor/TestXSSFExportToXML.java   | 532 +++++++++---------
+ test-data/spreadsheet/xxe_in_schema.xlsx      | Bin 0 -> 9801 bytes
+ 3 files changed, 286 insertions(+), 262 deletions(-)
+ create mode 100644 test-data/spreadsheet/xxe_in_schema.xlsx
+
+diff --git a/src/ooxml/java/org/apache/poi/xssf/extractor/XSSFExportToXml.java b/src/ooxml/java/org/apache/poi/xssf/extractor/XSSFExportToXml.java
+index 9320a226db..53984fec28 100644
+--- a/src/ooxml/java/org/apache/poi/xssf/extractor/XSSFExportToXml.java
++++ b/src/ooxml/java/org/apache/poi/xssf/extractor/XSSFExportToXml.java
+@@ -28,6 +28,7 @@ Licensed to the Apache Software Foundation (ASF) under one or more
+ import java.util.Map;
+ import java.util.Vector;
+ 
++import javax.xml.XMLConstants;
+ import javax.xml.transform.OutputKeys;
+ import javax.xml.transform.Source;
+ import javax.xml.transform.Transformer;
+@@ -241,9 +242,10 @@ public void exportToXML(OutputStream os, String encoding, boolean validate) thro
+      * @throws SAXException If validating the document fails
+      */
+     private boolean isValid(Document xml) throws SAXException{
+-        try{
++        try {
+             String language = "http://www.w3.org/2001/XMLSchema";
+             SchemaFactory factory = SchemaFactory.newInstance(language);
++            trySetFeature(factory, XMLConstants.FEATURE_SECURE_PROCESSING, true);
+ 
+             Source source = new DOMSource(map.getSchema());
+             Schema schema = factory.newSchema(source);
+@@ -313,7 +315,7 @@ private Node getNodeByXPath(String xpath,Node rootNode,Document doc,boolean crea
+         String[] xpathTokens = xpath.split("/");
+ 
+ 
+-        Node currentNode =rootNode;
++        Node currentNode = rootNode;
+         // The first token is empty, the second is the root node
+         for(int i =2; i<xpathTokens.length;i++) {
+ 
+@@ -535,4 +537,14 @@ private Node getComplexTypeNodeFromSchemaChildren(Node xmlSchema, Node complexTy
+         }
+         return complexTypeNode;
+     }
++
++    private static void trySetFeature(SchemaFactory sf, String feature, boolean enabled) {
++        try {
++            sf.setFeature(feature, enabled);
++        } catch (Exception e) {
++            LOG.log(POILogger.WARN, "SchemaFactory Feature unsupported", feature, e);
++        } catch (AbstractMethodError ame) {
++            LOG.log(POILogger.WARN, "Cannot set SchemaFactory feature because outdated XML parser in classpath", feature, ame);
++        }
++    }
+ }
