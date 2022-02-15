@@ -1,7 +1,7 @@
 %global reldate 20170915
 Name:                apache-poi
 Version:             3.17
-Release:             2
+Release:             3
 Summary:             The Java API for Microsoft Documents
 License:             ASL 2.0 and (CC-BY and CC-BY-SA and W3C) and GPLv3
 URL:                 http://poi.apache.org/
@@ -134,6 +134,9 @@ done
 %license LICENSE NOTICE
 
 %changelog
+* Mon Feb 14 2022 wangkai <wangkai385@huawei.com> - 3.17-3
+- Rebuild for fix log4j1.x cves
+
 * Tue Dec 1 2020 huanghaitao <huanghaitao8@huawei.com> - 3.17-2
 - Fix CVE-2019-12415
 
